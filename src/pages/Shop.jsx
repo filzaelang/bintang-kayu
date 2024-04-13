@@ -2,7 +2,7 @@
 import React from 'react';
 import CommonSection from '../components/UI/CommonSection';
 import Helmet from '../components/Helmet/Helmet';
-import { Container,Row,Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import "../styles/shop.css";
 import "../custom-hooks/useGetData"
 // import useGetData from '../custom-hooks/useGetData';
@@ -15,26 +15,26 @@ const Shop = () => {
             <CommonSection title="Products">
             </CommonSection>
 
-                <section>
-                    <Container>
-                        <Row>
-                            <Col lg='12' md='12'>
-                                
-                            </Col>
-                        </Row>
-                    </Container>
-                </section>
+            <section className='section'>
+                <Container>
+                    <Row>
+                        <Col lg='12' md='12'>
 
-                <section className="pt-0">
-                    <Container>
-                        <Row>
+                        </Col>
+                    </Row>
+                </Container>
+            </section>
+
+            <section className="pt-0 section">
+                <Container>
+                    <Row>
                         <ProductsList />
-                        </Row>
-                    </Container>
-                </section>
+                    </Row>
+                </Container>
+            </section>
 
         </Helmet>
-    );  
+    );
 };
 
 export default Shop;

@@ -3,7 +3,7 @@ import "../styles/cart.css";
 import '../styles/login.css';
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
-import { Container,Row,Col,Form, FormGroup } from "reactstrap";
+import { Container, Row, Col, Form, FormGroup } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { doc, getDoc, query, collection, where, getDocs } from 'firebase/firestore'
 import { db } from '../firebase.config';
@@ -11,30 +11,30 @@ import { useParams } from "react-router-dom";
 
 const DetailUserOrder = () => {
 
-    const {id} = useParams();
+    const { id } = useParams();
     const [pesanan, setPesanan] = useState({});
-    const docRef = doc(db,'Pesanan', id);
+    const docRef = doc(db, 'Pesanan', id);
     const [loading, setLoading] = useState(false);
 
-    useEffect(()=>{
-        const getPesanan = async()=>{
+    useEffect(() => {
+        const getPesanan = async () => {
             const docSnap = await getDoc(docRef);
 
-            if(docSnap.exists()){
+            if (docSnap.exists()) {
                 setPesanan(docSnap.data());
-                
+
             } else {
                 console.log('Tidak ada pesanan')
             }
         }
 
         getPesanan()
-    },[])
+    }, [])
 
-    const {idPembeli, idPesanan, idProduk, jumlahBarang, namaProduk, status, tanggalCetakKwitansi, tanggalPemesanan, harga, fotoCover, fotoBuktiPembayaran } = pesanan;
+    const { idPembeli, idPesanan, idProduk, jumlahBarang, namaProduk, status, tanggalCetakKwitansi, tanggalPemesanan, harga, fotoCover, fotoBuktiPembayaran } = pesanan;
 
     useEffect(() => {
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }, [pesanan]);
 
     //Dapatkan User
@@ -44,11 +44,11 @@ const DetailUserOrder = () => {
     //Dapatkan tanggal
     const [tanggalPesan, setTanggalPesan] = useState('');
 
-    const a = query(collection(db, "Pesanan"), where("idPesanan", "==", id ));
+    const a = query(collection(db, "Pesanan"), where("idPesanan", "==", id));
     getDocs(a).then(docSnap => {
         let users = [];
-        docSnap.forEach((doc)=> {
-            users.push({ ...doc.data(), id:doc.id })
+        docSnap.forEach((doc) => {
+            users.push({ ...doc.data(), id: doc.id })
         });
         const tanggalPesan1 = users[0]['tanggalPemesanan'];
         const tanggalKonfirmasi1 = users[0]['tanggalCetakKwitansi'];
@@ -67,8 +67,8 @@ const DetailUserOrder = () => {
     const q = query(collection(db, "users"), where("email", "==", email));
     getDocs(q).then(docSnap => {
         let users = [];
-        docSnap.forEach((doc)=> {
-            users.push({ ...doc.data(), id:doc.id })
+        docSnap.forEach((doc) => {
+            users.push({ ...doc.data(), id: doc.id })
         });
         const nama1 = users[0]['nama'];
         const alamat1 = users[0]['alamat'];
@@ -81,93 +81,93 @@ const DetailUserOrder = () => {
 
     const fireBaseTime = new Date(
         tanggalPesan.seconds * 1000 + tanggalPesan.nanoseconds / 1000000,
-      );
-      const date = fireBaseTime.toDateString();
-      const atTime = fireBaseTime.toLocaleTimeString();
-      const tanggalPesanFinal = date + "  " + atTime;
+    );
+    const date = fireBaseTime.toDateString();
+    const atTime = fireBaseTime.toLocaleTimeString();
+    const tanggalPesanFinal = date + "  " + atTime;
 
 
     return (
         <Helmet title="Pesanan">
             <CommonSection title="Pesanan Saya" />
-            <section>
+            <section className='section'>
                 <Container>
                     <Row>
                         <Col lg='12'>
-                        {
-                            loading ? <h4 className="py-5">Loading......</h4> : <>
-                            
-                                <h4 className="mb-5">Detail Pesanan</h4>
-                                <div className="form-box">
-                                    <Form>
-                                        <FormGroup className="form__group">
-                                            <span>Waktu Pemesanan</span>
-                                            <input type="text"
-                                                value={tanggalPesanFinal}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Status Pemesanan</span>
-                                            <input type="text"
-                                                value={status}
-                                                disabled />
-                                        </FormGroup>
-                                    </Form>
-                                </div>
-                                <div className="form-box">
-                                    <Form>
-                                        <FormGroup className="form__group">
-                                            <span>Nama Produk</span>
-                                            <input type="text"
-                                                value={namaProduk}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Foto Produk</span>
-                                            <img src={fotoCover} alt="" />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Jumlah Produk dipesan</span>
-                                            <input type="text"
-                                                value={jumlahBarang}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Total Harga</span>
-                                            <input type="text"
-                                                value={totalHarga.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
-                                                disabled />
-                                        </FormGroup>
-                                    </Form>
-                                </div>
-                                <div className="form-box">
-                                    <Form>
-                                        <FormGroup className="form__group">
-                                            <span>Nama Pembeli</span>
-                                            <input type="text"
-                                                value={nama}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Nomor Hp Pembeli</span>
-                                            <input type="text"
-                                                value={noHp2}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Alamat Pembeli</span>
-                                            <input type="text"
-                                                value={alamat2}
-                                                disabled />
-                                        </FormGroup>
-                                        <FormGroup className="form__group">
-                                            <span>Foto Bukti Pembayaran</span>
-                                            <img src={fotoBuktiPembayaran} alt="" />
-                                        </FormGroup>
-                                    </Form>
-                                </div>
-                            </>
-                        }
+                            {
+                                loading ? <h4 className="py-5">Loading......</h4> : <>
+
+                                    <h4 className="mb-5">Detail Pesanan</h4>
+                                    <div className="form-box">
+                                        <Form>
+                                            <FormGroup className="form__group">
+                                                <span>Waktu Pemesanan</span>
+                                                <input type="text"
+                                                    value={tanggalPesanFinal}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Status Pemesanan</span>
+                                                <input type="text"
+                                                    value={status}
+                                                    disabled />
+                                            </FormGroup>
+                                        </Form>
+                                    </div>
+                                    <div className="form-box">
+                                        <Form>
+                                            <FormGroup className="form__group">
+                                                <span>Nama Produk</span>
+                                                <input type="text"
+                                                    value={namaProduk}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Foto Produk</span>
+                                                <img src={fotoCover} alt="" />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Jumlah Produk dipesan</span>
+                                                <input type="text"
+                                                    value={jumlahBarang}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Total Harga</span>
+                                                <input type="text"
+                                                    value={totalHarga.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
+                                                    disabled />
+                                            </FormGroup>
+                                        </Form>
+                                    </div>
+                                    <div className="form-box">
+                                        <Form>
+                                            <FormGroup className="form__group">
+                                                <span>Nama Pembeli</span>
+                                                <input type="text"
+                                                    value={nama}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Nomor Hp Pembeli</span>
+                                                <input type="text"
+                                                    value={noHp2}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Alamat Pembeli</span>
+                                                <input type="text"
+                                                    value={alamat2}
+                                                    disabled />
+                                            </FormGroup>
+                                            <FormGroup className="form__group">
+                                                <span>Foto Bukti Pembayaran</span>
+                                                <img src={fotoBuktiPembayaran} alt="" />
+                                            </FormGroup>
+                                        </Form>
+                                    </div>
+                                </>
+                            }
                         </Col>
                     </Row>
                 </Container>

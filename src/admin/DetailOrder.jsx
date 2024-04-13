@@ -1,4 +1,4 @@
-import React,{ useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, FormGroup } from "reactstrap";
 import '../styles/login.css';
 import { useParams } from "react-router-dom";
@@ -7,30 +7,30 @@ import { doc, getDoc, query, collection, where, getDocs } from 'firebase/firesto
 
 const DetailOrder = () => {
 
-    const {id} = useParams();
+    const { id } = useParams();
     const [pesanan, setPesanan] = useState({});
-    const docRef = doc(db,'Pesanan', id);
+    const docRef = doc(db, 'Pesanan', id);
     const [loading, setLoading] = useState(false);
 
-    useEffect(()=>{
-        const getPesanan = async()=>{
+    useEffect(() => {
+        const getPesanan = async () => {
             const docSnap = await getDoc(docRef);
 
-            if(docSnap.exists()){
+            if (docSnap.exists()) {
                 setPesanan(docSnap.data());
-                
+
             } else {
                 console.log('Tidak ada pesanan')
             }
         }
 
         getPesanan()
-    },[])
+    }, [])
 
-    const {idPembeli, idPesanan, idProduk, jumlahBarang, namaProduk, status, tanggalCetakKwitansi, tanggalPemesanan, harga, fotoCover, fotoBuktiPembayaran } = pesanan;
+    const { idPembeli, idPesanan, idProduk, jumlahBarang, namaProduk, status, tanggalCetakKwitansi, tanggalPemesanan, harga, fotoCover, fotoBuktiPembayaran } = pesanan;
 
     useEffect(() => {
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }, [pesanan]);
 
     //Dapatkan User
@@ -40,11 +40,11 @@ const DetailOrder = () => {
     //Dapatkan tanggal
     const [tanggalPesan, setTanggalPesan] = useState('');
 
-    const a = query(collection(db, "Pesanan"), where("idPesanan", "==", id ));
+    const a = query(collection(db, "Pesanan"), where("idPesanan", "==", id));
     getDocs(a).then(docSnap => {
         let users = [];
-        docSnap.forEach((doc)=> {
-            users.push({ ...doc.data(), id:doc.id })
+        docSnap.forEach((doc) => {
+            users.push({ ...doc.data(), id: doc.id })
         });
         const tanggalPesan1 = users[0]['tanggalPemesanan'];
         const tanggalKonfirmasi1 = users[0]['tanggalCetakKwitansi'];
@@ -63,8 +63,8 @@ const DetailOrder = () => {
     const q = query(collection(db, "users"), where("email", "==", email));
     getDocs(q).then(docSnap => {
         let users = [];
-        docSnap.forEach((doc)=> {
-            users.push({ ...doc.data(), id:doc.id })
+        docSnap.forEach((doc) => {
+            users.push({ ...doc.data(), id: doc.id })
         });
         const nama1 = users[0]['nama'];
         const alamat1 = users[0]['alamat'];
@@ -75,25 +75,25 @@ const DetailOrder = () => {
     });
     /////////////////////////////////////////////////
 
-    
+
 
     const fireBaseTime = new Date(
         tanggalPesan.seconds * 1000 + tanggalPesan.nanoseconds / 1000000,
-      );
-      const date = fireBaseTime.toDateString();
-      const atTime = fireBaseTime.toLocaleTimeString();
-      const tanggalPesanFinal = date + "  " + atTime;
-    
+    );
+    const date = fireBaseTime.toDateString();
+    const atTime = fireBaseTime.toLocaleTimeString();
+    const tanggalPesanFinal = date + "  " + atTime;
+
 
     return (
-        
-        <section>
+
+        <section className='section'>
             <Container>
                 <Row>
                     <Col lg="12">
                         {
                             loading ? <h4 className="py-5">Loading......</h4> : <>
-                            
+
                                 <h4 className="mb-5">Detail Pesanan</h4>
                                 <div className="form-box">
                                     <Form>

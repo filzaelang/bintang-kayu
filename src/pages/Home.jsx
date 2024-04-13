@@ -1,14 +1,14 @@
 import React from 'react';
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/home.css";
-import { Container, Row,Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import heroImg from '../assets/images/hero-img.png';
 import Services from "../services/Services";
 
 const Home = () => {
 
     return <Helmet title={"Home"}>
-        <section className="hero__section">
+        <section className="hero__section section">
             <Container>
                 <Row>
                     <Col lg='6' md='6'>

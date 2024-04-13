@@ -1,10 +1,10 @@
-import React,{ useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, FormGroup } from "reactstrap";
 import '../styles/login.css';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 
-import { db,storage } from '../firebase.config';
+import { db, storage } from '../firebase.config';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { collection, getDoc, setDoc, doc, query, where, getDocs, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -15,29 +15,29 @@ import { useParams } from "react-router-dom";
 
 const EditProducts = () => {
 
-    const {id} = useParams();
+    const { id } = useParams();
     const [produk, setProduk] = useState({});
-    const docRef = doc(db,'Produk', id);
+    const docRef = doc(db, 'Produk', id);
 
-    useEffect(()=>{
-        const getProduk = async()=>{
+    useEffect(() => {
+        const getProduk = async () => {
             const docSnap = await getDoc(docRef);
 
-            if(docSnap.exists()){
+            if (docSnap.exists()) {
                 setProduk(docSnap.data());
-                
+
             } else {
                 console.log('Tidak ada pesanan')
             }
         }
 
         getProduk()
-    },[])
+    }, [])
 
     const { idProduk, namaProduk, hargaProduk, fotoCover, deskripsiSingkat, deskripsiLengkap } = produk;
 
     useEffect(() => {
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }, [produk]);
 
     const [enterTitle, setEnterTitle] = useState();
@@ -50,47 +50,47 @@ const EditProducts = () => {
 
     const navigate = useNavigate();
 
-    const updateNamaProduk = async(idProduk, namaProduk) => {
-        await updateDoc(doc(db, 'Produk', idProduk), {namaProduk: namaProduk});
+    const updateNamaProduk = async (idProduk, namaProduk) => {
+        await updateDoc(doc(db, 'Produk', idProduk), { namaProduk: namaProduk });
         toast.success("Berhasil di Update");
     }
 
-    const updateDeskripsiSingkat = async(idProduk, deskripsiSingkat) => {
-        await updateDoc(doc(db, 'Produk', idProduk), {deskripsiSingkat: deskripsiSingkat});
-        toast.success("Berhasil di Update"); 
+    const updateDeskripsiSingkat = async (idProduk, deskripsiSingkat) => {
+        await updateDoc(doc(db, 'Produk', idProduk), { deskripsiSingkat: deskripsiSingkat });
+        toast.success("Berhasil di Update");
     }
 
-    const updateDeskripsiLengkap = async(idProduk, deskripsiLengkap) => {
-        await updateDoc(doc(db, 'Produk', idProduk), {deskripsiLengkap: deskripsiLengkap});
-        toast.success("Berhasil di Update"); 
+    const updateDeskripsiLengkap = async (idProduk, deskripsiLengkap) => {
+        await updateDoc(doc(db, 'Produk', idProduk), { deskripsiLengkap: deskripsiLengkap });
+        toast.success("Berhasil di Update");
     }
 
-    const updateHarga = async(idProduk, hargaProduk) => {
-        await updateDoc(doc(db, 'Produk', idProduk), {hargaProduk: hargaProduk});
-        toast.success("Berhasil di Update"); 
+    const updateHarga = async (idProduk, hargaProduk) => {
+        await updateDoc(doc(db, 'Produk', idProduk), { hargaProduk: hargaProduk });
+        toast.success("Berhasil di Update");
     }
 
-    const updateFotoProduk = async(idProduk) => {
-            const id_unik = uuidv4();
-            const storageRef = ref(storage, 'products/'+id_unik+'.jpg');
-            const uploadTask = uploadBytesResumable(storageRef, enterProductImg);
-            
-            uploadTask.on(
-                'state_changed',
-                () => {},
-                () => {
-                    toast.error('images not uploaded!');
-                },
-                async ()=>{
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    await updateDoc(doc(db, 'Produk', idProduk), {fotoCover: downloadURL});
-                    toast.success("Berhasil di Update"); 
-                });
+    const updateFotoProduk = async (idProduk) => {
+        const id_unik = uuidv4();
+        const storageRef = ref(storage, 'products/' + id_unik + '.jpg');
+        const uploadTask = uploadBytesResumable(storageRef, enterProductImg);
+
+        uploadTask.on(
+            'state_changed',
+            () => { },
+            () => {
+                toast.error('images not uploaded!');
+            },
+            async () => {
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                await updateDoc(doc(db, 'Produk', idProduk), { fotoCover: downloadURL });
+                toast.success("Berhasil di Update");
+            });
     }
 
 
     return (
-        <section>
+        <section className='section'>
             <Container>
                 <Row>
                     <Col lg="12">
@@ -110,55 +110,55 @@ const EditProducts = () => {
                                     <tbody></tbody>
                                 </table>
                                 <div className="form-box">
-                                <Form>
-                                    <FormGroup className="form__group">
-                                        <span>Nama Produk</span>
-                                        <input type="text" placeholder=""
-                                            defaultValue={namaProduk}
-                                            onChange={e=> setEnterTitle(e.target.value)}
-                                            required />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
-                                        <span>Deskripsi Singkat</span>
-                                        <input type="text" placeholder=""
-                                            defaultValue={deskripsiSingkat}
-                                            onChange={e=> setEnterShortDesc(e.target.value)}
-                                            required />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
-                                        <span>Deskripsi Lengkap</span>
-                                        <textarea
-                                            defaultValue={deskripsiLengkap}
-                                            onChange={e=> setEnterDescription(e.target.value)}
-                                            rows="10"
-                                            ></textarea>
-                                    </FormGroup>
-                                    <div>
+                                    <Form>
                                         <FormGroup className="form__group">
-                                            <span>Harga (Rupiah)</span>
-                                            <input type="number" placeholder=""
-                                                defaultValue={hargaProduk}
-                                                onChange={e=> setEnterPrice(parseInt(e.target.value))}
+                                            <span>Nama Produk</span>
+                                            <input type="text" placeholder=""
+                                                defaultValue={namaProduk}
+                                                onChange={e => setEnterTitle(e.target.value)}
                                                 required />
                                         </FormGroup>
-                                    </div>
-                                    <div>
                                         <FormGroup className="form__group">
-                                            <span>Foto Produk</span>
-                                            <img src={fotoCover} alt="" /> 
+                                            <span>Deskripsi Singkat</span>
+                                            <input type="text" placeholder=""
+                                                defaultValue={deskripsiSingkat}
+                                                onChange={e => setEnterShortDesc(e.target.value)}
+                                                required />
                                         </FormGroup>
-                                    </div>
-                                    <div>
                                         <FormGroup className="form__group">
-                                            <span>Ganti Foto Produk</span>
-                                            <input 
-                                                type="file"
-                                                onChange={e=> setEnterProductImg(e.target.files[0])}
-                                            />
-                                            
+                                            <span>Deskripsi Lengkap</span>
+                                            <textarea
+                                                defaultValue={deskripsiLengkap}
+                                                onChange={e => setEnterDescription(e.target.value)}
+                                                rows="10"
+                                            ></textarea>
                                         </FormGroup>
-                                    </div>
-                                </Form>
+                                        <div>
+                                            <FormGroup className="form__group">
+                                                <span>Harga (Rupiah)</span>
+                                                <input type="number" placeholder=""
+                                                    defaultValue={hargaProduk}
+                                                    onChange={e => setEnterPrice(parseInt(e.target.value))}
+                                                    required />
+                                            </FormGroup>
+                                        </div>
+                                        <div>
+                                            <FormGroup className="form__group">
+                                                <span>Foto Produk</span>
+                                                <img src={fotoCover} alt="" />
+                                            </FormGroup>
+                                        </div>
+                                        <div>
+                                            <FormGroup className="form__group">
+                                                <span>Ganti Foto Produk</span>
+                                                <input
+                                                    type="file"
+                                                    onChange={e => setEnterProductImg(e.target.files[0])}
+                                                />
+
+                                            </FormGroup>
+                                        </div>
+                                    </Form>
                                 </div>
                             </>
                         }

@@ -1,6 +1,6 @@
-import React,{ useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Container,Row,Col } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import { useParams } from "react-router-dom";
 
 import Helmet from '../components/Helmet/Helmet';
@@ -20,17 +20,17 @@ const ProductDetails = () => {
 
     const [product, setProduct] = useState({});
     const dispatch = useDispatch();
-    const [tab,setTab] = useState('desc');
-    const {id} = useParams();
-    
-    const docRef = doc(db,'Produk', id);
+    const [tab, setTab] = useState('desc');
+    const { id } = useParams();
+
+    const docRef = doc(db, 'Produk', id);
     const { data: products } = useGetData('Produk')
 
-    useEffect(()=>{
-        const getProduct = async()=>{
+    useEffect(() => {
+        const getProduct = async () => {
             const docSnap = await getDoc(docRef);
 
-            if(docSnap.exists()){
+            if (docSnap.exists()) {
                 setProduct(docSnap.data())
             } else {
                 console.log('no product!')
@@ -38,31 +38,31 @@ const ProductDetails = () => {
         }
 
         getProduct()
-    },[])
+    }, [])
 
-    const {fotoCover, namaProduk, hargaProduk, deskripsiLengkap, deskripsiSingkat } = product
+    const { fotoCover, namaProduk, hargaProduk, deskripsiLengkap, deskripsiSingkat } = product
 
     const addToCart = () => {
         dispatch(cartActions.addItem({
-                id : id,
-                productName: namaProduk,
-                price: hargaProduk,
-                imgUrl:fotoCover,
-            })
+            id: id,
+            productName: namaProduk,
+            price: hargaProduk,
+            imgUrl: fotoCover,
+        })
         );
-        
+
         toast.success("Product added successfully");
     };
 
     useEffect(() => {
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }, [product]);
 
     return (
         <Helmet title={namaProduk}>
             <CommonSection title={namaProduk} />
 
-            <section className="pt-0">
+            <section className="pt-0 section">
                 <Container>
                     <Row>
                         <Col lg="6">
@@ -72,20 +72,20 @@ const ProductDetails = () => {
                         <Col lg="6">
                             <div className="product__details">
                                 <h2>{namaProduk}</h2>
-                                
+
 
                                 <span className="product__price">{accounting.formatMoney(hargaProduk, "Rp ")}</span>
                                 <p className="mt-3">{deskripsiSingkat}</p>
 
-                                
+
                                 <textarea
                                     value={deskripsiLengkap}
                                     rows="12"
                                     readOnly
-                                    ></textarea>
+                                ></textarea>
 
-                                <motion.button 
-                                    whileTap={{ scale: 1.2 }} 
+                                <motion.button
+                                    whileTap={{ scale: 1.2 }}
                                     className="buy__btn"
                                     onClick={addToCart}
                                 >
@@ -98,7 +98,7 @@ const ProductDetails = () => {
             </section>
         </Helmet>
     )
-        
+
 };
 
 export default ProductDetails;

@@ -8,31 +8,31 @@ import { useSelector } from "react-redux";
 
 const Checkout = () => {
 
-    const totalQty = useSelector(state=>state.cart.totalQuantity);
-    const totalAmount = useSelector(state=>state.cart.totalAmount);
+    const totalQty = useSelector(state => state.cart.totalQuantity);
+    const totalAmount = useSelector(state => state.cart.totalAmount);
 
-    return<Helmet title="Checkout">
+    return <Helmet title="Checkout">
         <CommonSection title="Checkout" />
-        <section>
+        <section className='section'>
             <Container>
                 <Row>
                     <Col lg='6' id="formIsi">
                         <div className='form-box'>
                             <h6 className="mb-4 fw-bold">Billing Information</h6>
-                                <Form className='billing__form'>
-                                    <FormGroup className='form__group'>
-                                        <input type="text" placeholder='Nama' />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
-                                        <input type="email" placeholder="Email" />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
-                                        <input type="number" placeholder="No Hp / Whatsapp" />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
-                                        <input type="text" placeholder="Alamat" />
-                                    </FormGroup>
-                                </Form>
+                            <Form className='billing__form'>
+                                <FormGroup className='form__group'>
+                                    <input type="text" placeholder='Nama' />
+                                </FormGroup>
+                                <FormGroup className="form__group">
+                                    <input type="email" placeholder="Email" />
+                                </FormGroup>
+                                <FormGroup className="form__group">
+                                    <input type="number" placeholder="No Hp / Whatsapp" />
+                                </FormGroup>
+                                <FormGroup className="form__group">
+                                    <input type="text" placeholder="Alamat" />
+                                </FormGroup>
+                            </Form>
                         </div>
                     </Col>
                     <Col lg="1">
@@ -51,7 +51,7 @@ const Checkout = () => {
             </Container>
         </section>
     </Helmet>
-            
+
 };
 
 export default Checkout;

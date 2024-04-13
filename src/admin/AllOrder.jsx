@@ -3,22 +3,22 @@ import { Container, Row, Col } from "reactstrap";
 import '../styles/allproducts.css';
 import useGetData from "../custom-hooks/useGetData";
 import { db } from "../firebase.config";
-import { doc, updateDoc, serverTimestamp} from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const AllOrder = () => {
 
-    const {data: dataPesanan, loading} = useGetData('Pesanan');
+    const { data: dataPesanan, loading } = useGetData('Pesanan');
 
 
-    const updatePesanan = async(id)=> {
-        await updateDoc(doc(db, 'Pesanan', id), {status: "Dikonfirmasi", tanggalCetakKwitansi: serverTimestamp()});
-        toast.success("Dikonfirmasi"); 
+    const updatePesanan = async (id) => {
+        await updateDoc(doc(db, 'Pesanan', id), { status: "Dikonfirmasi", tanggalCetakKwitansi: serverTimestamp() });
+        toast.success("Dikonfirmasi");
     }
 
     return (
-        <section>
+        <section className="section">
             <Container>
                 <Row>
                     <Col lg='12'>
@@ -35,7 +35,7 @@ const AllOrder = () => {
                             </thead>
                             <tbody>
                                 {
-                                    loading ? <h4 className="py-5 text-center fw-bold">Loading.....</h4> : dataPesanan.map(item=>(
+                                    loading ? <h4 className="py-5 text-center fw-bold">Loading.....</h4> : dataPesanan.map(item => (
                                         <tr key={item.idPesanan}>
                                             <td>
                                                 <img src={item.fotoCover} alt="" style={{ width: '80px', height: '80px' }} />
@@ -50,22 +50,21 @@ const AllOrder = () => {
                                                 {item.status}
                                             </td>
                                             <td>
-                                                
-                                                <Link to={''+item.idPesanan}>
+
+                                                <Link to={'' + item.idPesanan}>
                                                     <button
                                                         className="btn"
                                                         id="detailPesanan">
-                                                            Detail
+                                                        Detail
                                                     </button>
                                                 </Link>
                                                 <br></br><br></br>
                                                 <button
-                                                    onClick={()=>
-                                                        {updatePesanan(item.idPesanan)}
-                                                    } 
-                                                    className="btn success" 
+                                                    onClick={() => { updatePesanan(item.idPesanan) }
+                                                    }
+                                                    className="btn success"
                                                     id="konfirmasi">
-                                                        Konfirmasi
+                                                    Konfirmasi
                                                 </button>
                                             </td>
                                         </tr>
