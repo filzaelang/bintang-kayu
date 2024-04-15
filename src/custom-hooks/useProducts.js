@@ -16,7 +16,6 @@ const useProducts = () => {
 
             // ========== Firebase firestore realtime data update ===============
             await onSnapshot(collectionRef, (snapshot) => {
-                console.log("blablabla")
                 dispatch(GET_PRODUCTS(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))))
                 setLoading(false);
             });

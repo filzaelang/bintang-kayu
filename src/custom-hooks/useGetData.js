@@ -18,7 +18,6 @@ const useGetData = (collectionName) => {
 
             // ========== Firebase firestore realtime data update ===============
             await onSnapshot(collectionRef, (snapshot) => {
-                console.log("useState oioioi")
                 setData(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
                 // dispatch(GET_PRODUCTS(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))))
                 setLoading(false);

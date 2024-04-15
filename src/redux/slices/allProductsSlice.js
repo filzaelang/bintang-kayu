@@ -9,7 +9,6 @@ export const allProductsSlice = createSlice({
     initialState: initialState,
     reducers: {
         GET_PRODUCTS: (state, action) => {
-            console.log("Blablabla", action.payload)
             state.data = action.payload
         }
     }
