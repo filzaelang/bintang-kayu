@@ -3,7 +3,7 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Routers from '../../routers/Routers';
 
-import AdminNav from "../../admin/AdminNav";
+import AdminNavbar from '../../admin/AdminNavbar';
 import { useLocation } from 'react-router-dom';
 
 const Layout = () => {
@@ -13,7 +13,7 @@ const Layout = () => {
     return (
         <>
             {
-                location.pathname.startsWith('/dashboard') ? <AdminNav /> : <Header />
+                location.pathname.startsWith('/dashboard') ? <AdminNavbar /> : <Header />
             }
 
             <div>
