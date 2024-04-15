@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container } from "reactstrap";
+import '../styles/admin-nav.css';
 
 export default function AdminHeader() {
     return (
