@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import "../../styles/product-card.css";
 import 'react-toastify/dist/ReactToastify.css';
 import { Col } from "reactstrap"
@@ -10,32 +10,33 @@ import { cartActions } from "../../redux/slices/cartSlice";
 import useAuth from "../../custom-hooks/useAuth";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { db } from '../../firebase.config';
-import {auth} from "../../firebase.config";
-import {onAuthStateChanged} from "firebase/auth";
+import { auth } from "../../firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
-
-const ProductCard = ({item}) => {
+const ProductCard = ({ item }) => {
 
     const navigate = useNavigate();
 
-    const {currentUser} = useAuth();
+    // const {currentUser} = useAuth();
+    const currentUser = useSelector((state) => state.currentUser.data)
 
     const [idUser, setIdUser] = useState('');
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch()
 
-    const addToCart =()=>{
+    const addToCart = () => {
         dispatch(cartActions.addItem({
             id: item.idProduk,
-            productName : item.namaProduk,
+            productName: item.namaProduk,
             price: item.hargaProduk,
-            imgUrl : item.fotoCover,
+            imgUrl: item.fotoCover,
         })
         );
-        
+
         toast.success("Product added successdully")
     };
 
@@ -44,7 +45,7 @@ const ProductCard = ({item}) => {
     //         if(user){
     //             const uid = user.email;
     //             const q = query(collection(db, "users"), where("email", "==", uid));
-                
+
     //             getDocs(q).then(docSnap => {
     //                 let users = [];
     //                 docSnap.forEach((doc)=> {
@@ -60,7 +61,7 @@ const ProductCard = ({item}) => {
     //     })
     // })
 
-    const addKeranjang = async(e)=>{
+    const addKeranjang = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -68,8 +69,8 @@ const ProductCard = ({item}) => {
         try {
             // const docRef = await collection(db,'Keranjang');
             const id_unik = uuidv4();
-            
-            setDoc(doc(db,'Keranjang', id_unik),{
+
+            setDoc(doc(db, 'Keranjang', id_unik), {
                 IdKeranjang: id_unik,
                 IdProduk: item.idProduk,
                 IdUser: idUser,
@@ -94,19 +95,19 @@ const ProductCard = ({item}) => {
         <Col lg='3' md='4' className='mb-2'>
             <div className="product__item">
                 <div className="product__img">
-                    <motion.img whileHover={{scale: 0.9}} src={item.fotoCover} alt="" />
+                    <motion.img whileHover={{ scale: 0.9 }} src={item.fotoCover} alt="" />
                 </div>
                 <div className="p-2 product__info">
                     <h3 className="produce__name">
-                        <Link to={'/shop/'+item.idProduk}>{item.namaProduk}</Link>
+                        <Link to={'/shop/' + item.idProduk}>{item.namaProduk}</Link>
                     </h3>
-                    
+
                 </div>
                 <div className="product__card-bottom d-flex align-items-center
                 justify-content-between p-2">
                     <span className="price">{item.hargaProduk.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
-                    <motion.span 
-                        whileTap={{scale:1.2}} 
+                    <motion.span
+                        whileTap={{ scale: 1.2 }}
                         onClick={
                             currentUser ? (
                                 // addKeranjang

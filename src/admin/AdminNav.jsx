@@ -29,8 +29,6 @@ const admin__nav = [
 
 const AdminNav = () => {
 
-    const { currentUser } = useAuth();
-
     return (
         <>
             <header className="admin__header">
@@ -40,8 +38,6 @@ const AdminNav = () => {
                             <div className="logo">
                                 <h2>Bintang Kayu</h2>
                             </div>
-
-
                         </div>
                     </Container>
                 </div>

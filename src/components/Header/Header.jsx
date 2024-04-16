@@ -40,7 +40,8 @@ const Header = () => {
 
     const menuRef = useRef(null);
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
+    const currentUser = useSelector((state) => state.currentUser.data)
+    // const { currentUser } = useAuth();
 
     const stickyHeaderFunc = () => {
         window.addEventListener('scroll', () => {
