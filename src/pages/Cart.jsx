@@ -121,7 +121,7 @@ const Tr = ({ item }) => {
         setLoading(true);
 
         if (!buktiPembayaran) {
-            toast.error('images not uploaded!');
+            toast.error('Bukti pembayaran belum di upload!');
         } else {
             // //====================== Add Product to Firebase Firestore Database ==========================//
             try {
