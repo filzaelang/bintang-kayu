@@ -120,48 +120,51 @@ const Tr = ({ item }) => {
         // e.preventDefault();
         setLoading(true);
 
-        // //====================== Add Product to Firebase Firestore Database ==========================//
-        try {
-            const id_unik = uuidv4().slice(0, 20);
-            const storageRef = ref(storage, 'buktiPembayaran/' + id_unik + '.jpg');
-            const uploadTask = uploadBytesResumable(storageRef, buktiPembayaran);
-            const totalHarga = item.price * item.quantity;
+        if (!buktiPembayaran) {
+            toast.error('images not uploaded!');
+        } else {
+            // //====================== Add Product to Firebase Firestore Database ==========================//
+            try {
+                const id_unik = uuidv4().slice(0, 20);
+                const storageRef = ref(storage, 'buktiPembayaran/' + id_unik + '.jpg');
+                const uploadTask = uploadBytesResumable(storageRef, buktiPembayaran);
+                const totalHarga = item.price * item.quantity;
 
-            uploadTask.on(
-                'state_changed',
-                () => { },
-                () => {
-                    toast.error('images not uploaded!');
-                },
-                async () => {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                uploadTask.on(
+                    'state_changed',
+                    () => { },
+                    () => {
+                        toast.error('images not uploaded!');
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-                    await setDoc(doc(db, 'Pesanan', id_unik), {
-                        idPesanan: id_unik,
-                        idPembeli: currentUserEmail,
-                        idProduk: item.id,
-                        jumlahBarang: item.quantity,
-                        namaProduk: item.productName,
-                        status: "Menunggu Konfirmasi",
-                        fotoCover: item.imgUrl,
-                        fotoBuktiPembayaran: downloadURL,
-                        harga: totalHarga,
-                        tanggalPemesanan: serverTimestamp(),
-                        tanggalCetakKwitansi: " "
+                        await setDoc(doc(db, 'Pesanan', id_unik), {
+                            idPesanan: id_unik,
+                            idPembeli: currentUserEmail,
+                            idProduk: item.id,
+                            jumlahBarang: item.quantity,
+                            namaProduk: item.productName,
+                            status: "Menunggu Konfirmasi",
+                            fotoCover: item.imgUrl,
+                            fotoBuktiPembayaran: downloadURL,
+                            harga: totalHarga,
+                            tanggalPemesanan: serverTimestamp(),
+                            tanggalCetakKwitansi: " "
 
-                    })
+                        })
 
-                });
+                    });
 
-            deleteProduct();
-            setLoading(false);
-            toast.success('Berhasil melakukan pesanan');
-            navigate("/home");
-        } catch (err) {
-            setLoading(false);
-            toast.error("Gagal melakukan pesanan");
+                deleteProduct();
+                setLoading(false);
+                toast.success('Berhasil melakukan pesanan');
+                navigate("/home");
+            } catch (err) {
+                setLoading(false);
+                toast.error("Gagal melakukan pesanan");
+            }
         }
-
     }
 
     return (
